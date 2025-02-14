@@ -1,0 +1,27 @@
+package baniakjr.lwp
+
+enum class Command(override val value: Byte) : LWPByteValue {
+    HUB_PROPERTY(0x01),
+    HUB_ACTION(0x02),
+    ALERT(0x03),
+    ATTACHED_IO(0x04),
+    ERROR(0x05),
+    HW_NETWORK(0x08),
+    PORT_INFORMATION_REQUEST(0x21),
+    PORT_MODE_INFORMATION_REQUEST(0x22),
+    PORT_INPUT_FORMAT_SETUP_SINGLE(0x41),
+    PORT_INPUT_FORMAT_SETUP_COMBINED(0x42),
+    PORT_INFORMATION(0x43),
+    PORT_MODE_INFORMATION(0x44),
+    PORT_VALUE_SINGLE(0x45),
+    PORT_VALUE_COMBINED(0x46),
+    PORT_INPUT_FORMAT_SINGLE(0x47),
+    PORT_INPUT_FORMAT_COMBINED(0x48),
+    VIRTUAL_PORT_SETUP(0x61),
+    PORT_OUTPUT(0x81.toByte()),
+    PORT_OUTPUT_COMMAND_FEEDBACK(0x82.toByte());
+
+    companion object {
+        const val IN_MESSAGE_INDEX: Int = 2
+    }
+}

@@ -1,0 +1,18 @@
+package baniakjr.lwp
+
+enum class PortOutputSubCommand(override val value: Byte) : LWPByteValue {
+    START_POWER_SINGLE(0x01),
+    START_POWER_DUAL(0x02),
+    SET_ACC_TIME(0x05),
+    SET_DEC_TIME(0x06),
+    START_SPEED_SINGLE(0x07),
+    START_SPEED_DUAL(0x08),
+    START_SPEED_FOR_TIME_SINGLE(0x09),
+    START_SPEED_FOR_TIME_DUAL(0x0a),
+    START_SPEED_FOR_DEG_SINGLE(0x0b),
+    START_SPEED_FOR_DEG_DUAL(0x0c),
+    GOTO_ABS_POS_SINGLE(0x0d),
+    GOTO_ABS_POS_DUAL(0x0e),
+    WRITE_DIRECT(0x50),
+    WRITE_DIRECT_MODE(0x51);
+}
