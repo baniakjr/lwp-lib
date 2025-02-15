@@ -9,8 +9,10 @@ import java.util.*
  */
 object LWP {
 
-    val CHARACTERISTIC_UUID: UUID = UUID.fromString("00001624-1212-efde-1623-785feabcd123")
-    val SERVICE_UUID: UUID = UUID.fromString("00001623-1212-efde-1623-785feabcd123")
+
+    const val CHARACTERISTIC_UUID: String = "00001624-1212-efde-1623-785feabcd123"
+
+    const val SERVICE_UUID: String = "00001623-1212-efde-1623-785feabcd123"
 
     const val MESSAGE_HEADER: Byte = 0x00
 
@@ -30,6 +32,7 @@ object LWP {
      * @param startupCompletion StartupCompletion - Startup completion type for command. Default Immediate no feedback
      * @return ByteArray LWP Command
      */
+    @JvmStatic
     fun setLedValuesCommand(
         mask: LWPMask<SixLed>,
         value: Byte,
@@ -49,6 +52,7 @@ object LWP {
      * @param startupCompletion StartupCompletion - Startup completion type for command. Default Immediate no feedback
      * @return ByteArray LWP Command
      */
+    @JvmStatic
     fun setHubLightColorCommand(
         color: HubLedColor,
         startupCompletion: StartupCompletion = StartupCompletion.IMMEDIATE_NO_FEEDBACK
@@ -66,6 +70,7 @@ object LWP {
      * @param property HubProperty - Property to request
      * @return ByteArray LWP Command
      */
+    @JvmStatic
     fun getHubPropertyCommand(property: HubProperty): ByteArray {
         return createCommand(
             listOf(
@@ -83,6 +88,7 @@ object LWP {
      * @param startupCompletion StartupCompletion - Startup completion type for command. Default Immediate no feedback
      * @return ByteArray LWP Command
      */
+    @JvmStatic
     fun setPortPower(
         port: Port,
         value: Byte,
@@ -100,6 +106,7 @@ object LWP {
      * Creates the Play VM command to initialize Play VM
      * @return ByteArray LWP Command
      */
+    @JvmStatic
     fun playVmInit(): ByteArray {
         return setPlayVM(0.toByte(), 0.toByte(), LWPMask(PlayVmOperation.INIT))
     }
@@ -109,6 +116,7 @@ object LWP {
      * Needs to be sent after the INIT command
      * @return ByteArray LWP Command
      */
+    @JvmStatic
     fun playVmAutoCalibrate(): ByteArray {
         return setPlayVM(0.toByte(), 0.toByte(), LWPMask(PlayVmOperation.CALIBRATE))
     }
@@ -121,6 +129,7 @@ object LWP {
      * @param startupCompletion StartupCompletion - Startup completion type for command. Default Immediate no feedback
      * @return ByteArray LWP Command
      */
+    @JvmStatic
     fun setPlayVM(
         speedRaw: Byte,
         steer: Byte,
@@ -141,6 +150,7 @@ object LWP {
      * @param message ByteArray - Message to process
      * @return String - Version number
      */
+    @JvmStatic
     fun processVersionNumber(message: ByteArray): String {
         if (message.size < HubProperty.MSG_WO_DATA_LENGTH + 4) {
             return ""
@@ -166,6 +176,7 @@ object LWP {
      * @param mode Mode - Mode for which the value is requested, default Mode 0
      * @return ByteArray LWP Command
      */
+    @JvmStatic
     fun portValueInformationCommand(port: Port, mode: PortInformationType = PortInformationType.VALUE): ByteArray {
         return createCommand(
             listOf(
@@ -184,6 +195,7 @@ object LWP {
      * @param startupCompletion StartupCompletion - Startup completion type for command. Default Immediate no feedback
      * @return ByteArray LWP Command
      */
+    @JvmStatic
     fun setPortPowerMode(
         port: Port,
         mode: PortMode,
@@ -206,6 +218,7 @@ object LWP {
      * @param startupCompletion StartupCompletion
      * @return ByteArray LWP Command
      */
+    @JvmStatic
     fun setOutputSubcommand(
         port: Port,
         subCommand: PortOutputSubCommand,
@@ -220,6 +233,7 @@ object LWP {
      * @param message ByteArray - Message to process
      * @return String - LWP Version
      */
+    @JvmStatic
     fun processLWPVersion(message: ByteArray): String? {
         if (message.size < HubProperty.MSG_WO_DATA_LENGTH + 2) {
             return null
@@ -232,6 +246,7 @@ object LWP {
      * @param message ByteArray - Message to process
      * @return Float - Battery voltage
      */
+    @JvmStatic
     fun processBatterVoltage(message: ByteArray): Float? {
         return processTemperature(message)
     }
@@ -241,6 +256,7 @@ object LWP {
      * @param message ByteArray - Message to process
      * @return Float - Temperature
      */
+    @JvmStatic
     fun processTemperature(message: ByteArray): Float? {
         if (message.size < 6) {
             return null
@@ -254,6 +270,7 @@ object LWP {
      * @param message ByteArray - Message to process
      * @return Int - Battery percentage
      */
+    @JvmStatic
     fun processBatterPercentage(message: ByteArray): Int? {
         if (message.size < HubProperty.MSG_WO_DATA_LENGTH + 1) {
             return null
@@ -266,6 +283,7 @@ object LWP {
      * @param message ByteArray - Message to process
      * @return String - Hub name
      */
+    @JvmStatic
     fun processHubName(message: ByteArray): String? {
         if (message.size < HubProperty.MSG_WO_DATA_LENGTH + 1) {
             return null
@@ -283,6 +301,7 @@ object LWP {
      * @param bytes ByteArray - Bytes to convert, should be at least 4 bytes
      * @return Int - Bytes converted int32
      */
+    @JvmStatic
     fun int32From4ByteArray(bytes: ByteArray): Int {
         return (bytes[0].toInt() shl 24) or
                 (bytes[1].toInt() shl 16) or
@@ -295,6 +314,7 @@ object LWP {
      * @param bytes ByteArray - Bytes to convert, should be at least 2 bytes
      * @return Int - Bytes converted int16
      */
+    @JvmStatic
     fun int16From2ByteArray(bytes: ByteArray): Int {
         return (bytes[0].toInt() and 0xff shl 8) or (bytes[1].toInt() and 0xff)
     }
