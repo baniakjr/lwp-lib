@@ -32,6 +32,7 @@ object LWP {
      * @param startupCompletion StartupCompletion - Startup completion type for command. Default Immediate no feedback
      * @return ByteArray LWP Command
      */
+    @JvmOverloads
     @JvmStatic
     fun setLedValuesCommand(
         mask: LWPMask<SixLed>,
@@ -52,6 +53,7 @@ object LWP {
      * @param startupCompletion StartupCompletion - Startup completion type for command. Default Immediate no feedback
      * @return ByteArray LWP Command
      */
+    @JvmOverloads
     @JvmStatic
     fun setHubLightColorCommand(
         color: HubLedColor,
@@ -88,6 +90,7 @@ object LWP {
      * @param startupCompletion StartupCompletion - Startup completion type for command. Default Immediate no feedback
      * @return ByteArray LWP Command
      */
+    @JvmOverloads
     @JvmStatic
     fun setPortPower(
         port: Port,
@@ -129,6 +132,7 @@ object LWP {
      * @param startupCompletion StartupCompletion - Startup completion type for command. Default Immediate no feedback
      * @return ByteArray LWP Command
      */
+    @JvmOverloads
     @JvmStatic
     fun setPlayVM(
         speedRaw: Byte,
@@ -176,6 +180,7 @@ object LWP {
      * @param mode Mode - Mode for which the value is requested, default Mode 0
      * @return ByteArray LWP Command
      */
+    @JvmOverloads
     @JvmStatic
     fun portValueInformationCommand(port: Port, mode: PortInformationType = PortInformationType.VALUE): ByteArray {
         return createCommand(
@@ -195,6 +200,7 @@ object LWP {
      * @param startupCompletion StartupCompletion - Startup completion type for command. Default Immediate no feedback
      * @return ByteArray LWP Command
      */
+    @JvmOverloads
     @JvmStatic
     fun setPortPowerMode(
         port: Port,
@@ -218,6 +224,7 @@ object LWP {
      * @param startupCompletion StartupCompletion
      * @return ByteArray LWP Command
      */
+    @JvmOverloads
     @JvmStatic
     fun setOutputSubcommand(
         port: Port,
