@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "baniakjr"
-version = "1.1-SNAPSHOT"
+version = "1.1"
 
 repositories {
     mavenCentral()
