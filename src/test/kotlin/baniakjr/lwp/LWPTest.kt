@@ -11,7 +11,7 @@ class LWPTest {
 
     @Test
     fun intFrom2ByteArray() {
-        val inputArray = byteArrayOf(0x01, 0x02)
+        val inputArray = byteArrayOf(0x02, 0x01)
 
         val result = LWP.int16From2ByteArray(inputArray)
 
@@ -67,9 +67,9 @@ class LWPTest {
     @ParameterizedTest
     @MethodSource("getFloatData")
     fun processTemperature(input: Float) {
-        val expected = (input / 1000f)
+        val expected = (input / 10f)
         val inputArray =
-            byteArrayOf(0x0a, 0x00, 0x45, 0x37, (input.toInt() shr 8).toByte(), (input.toInt() shr 0).toByte())
+            byteArrayOf(0x0a, 0x00, 0x45, 0x37, (input.toInt() shr 0).toByte(), (input.toInt() shr 8).toByte())
 
         val result = LWP.processTemperature(inputArray)
 
@@ -81,8 +81,7 @@ class LWPTest {
     fun processBatteryVoltage(input: Float) {
         val expected = (input / 1000f)
         val inputArray =
-            byteArrayOf(0x0a, 0x00, 0x45, 0x3C, (input.toInt() shr 8).toByte(), (input.toInt() shr 0).toByte())
-
+            byteArrayOf(0x0a, 0x00, 0x45, 0x3C, (input.toInt() shr 0).toByte(), (input.toInt() shr 8).toByte())
         val result = LWP.processBatterVoltage(inputArray)
 
         assertThat(result).isEqualTo(expected)

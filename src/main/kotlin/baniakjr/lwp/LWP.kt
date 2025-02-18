@@ -251,17 +251,21 @@ object LWP {
     /**
      * Returns battery voltage decoded from message
      * @param message ByteArray - Message to process
-     * @return Float - Battery voltage
+     * @return Float - Battery voltage in Volts
      */
     @JvmStatic
     fun processBatterVoltage(message: ByteArray): Float? {
-        return processTemperature(message)
+        if (message.size < 6) {
+            return null
+        }
+        val versionBytes = Arrays.copyOfRange(message, 4, 6)
+        return int16From2ByteArray(versionBytes) / 1000f
     }
 
     /**
      * Returns temperature decoded from message
      * @param message ByteArray - Message to process
-     * @return Float - Temperature
+     * @return Float - Temperature in Celsius
      */
     @JvmStatic
     fun processTemperature(message: ByteArray): Float? {
@@ -269,7 +273,7 @@ object LWP {
             return null
         }
         val versionBytes = Arrays.copyOfRange(message, 4, 6)
-        return int16From2ByteArray(versionBytes) / 1000f
+        return int16From2ByteArray(versionBytes) / 10f
     }
 
     /**
@@ -317,13 +321,13 @@ object LWP {
     }
 
     /**
-     * Convert 2 bytes to int16
+     * Convert 2 bytes to int16, little endian
      * @param bytes ByteArray - Bytes to convert, should be at least 2 bytes
      * @return Int - Bytes converted int16
      */
     @JvmStatic
     fun int16From2ByteArray(bytes: ByteArray): Int {
-        return (bytes[0].toInt() and 0xff shl 8) or (bytes[1].toInt() and 0xff)
+        return (bytes[1].toInt() and 0xff shl 8) or (bytes[0].toInt() and 0xff)
     }
 
     private fun createCommand(args: List<Byte>): ByteArray {
