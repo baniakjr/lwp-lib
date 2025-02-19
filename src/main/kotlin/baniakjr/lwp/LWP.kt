@@ -320,7 +320,13 @@ object LWP {
         return stringFromByteArray(nameBytes)
     }
 
-    private fun stringFromByteArray(byteArray: ByteArray): String {
+    /**
+     * Convert byteArray to String
+     * @param byteArray ByteArray - Bytes to convert
+     * @return String - Bytes converted String
+     */
+    @JvmStatic
+    fun stringFromByteArray(byteArray: ByteArray): String {
         return String(byteArray, StandardCharsets.UTF_8)
     }
 
