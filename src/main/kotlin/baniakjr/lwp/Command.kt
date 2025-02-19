@@ -2,7 +2,10 @@ package baniakjr.lwp
 
 /**
  * Command byte values for LWP messages
- * reference: https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#message-types
+ *
+ * Reference: [https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#message-types](https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#message-types)
+ *
+ * @property value Byte value of the command.
  */
 enum class Command(override val value: Byte) : LWPByteValue {
     /** Hub property. Value 0x01 */

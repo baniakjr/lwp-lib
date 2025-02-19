@@ -9,11 +9,28 @@ import java.util.*
  */
 object LWP {
 
-
+    /** String value of UUID of LEGO Hub Characteristic
+     *
+     * Reference: [https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#lego-specific-gatt-service](https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#lego-specific-gatt-service)
+     *
+     * Value: 00001624-1212-efde-1623-785feabcd123
+     */
     const val CHARACTERISTIC_UUID: String = "00001624-1212-efde-1623-785feabcd123"
 
+    /** String value of UUID of LEGO Hub Service
+     *
+     * Reference: [https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#lego-specific-gatt-service](https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#lego-specific-gatt-service)
+     *
+     * Value: 00001623-1212-efde-1623-785feabcd123
+     */
     const val SERVICE_UUID: String = "00001623-1212-efde-1623-785feabcd123"
 
+    /** Constant part of common message header
+     *
+     * Reference: [https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#common-message-header](https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#common-message-header)
+     *
+     * Value: 0x00
+     */
     const val MESSAGE_HEADER: Byte = 0x00
 
     const val MINIMAL_MSG_LENGTH: Int = 4

@@ -1,8 +1,11 @@
 package baniakjr.lwp
 
 /**
- * Alert Operations for Hub Alert Command 0x03
- * reference: https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#alert-operation
+ * Enum class representing Alert Operations for [Hub Alert Command][Command.ALERT]
+ *
+ * Reference: [https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#alert-operation](https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#alert-operation)
+ *
+ * @property value Byte value of the alert operation.
  */
 enum class AlertOperation(override val value: Byte) : LWPByteValue {
 

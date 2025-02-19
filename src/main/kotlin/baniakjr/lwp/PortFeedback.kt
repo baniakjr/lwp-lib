@@ -1,5 +1,9 @@
 package baniakjr.lwp
 
+/**
+ * Port feedback values.
+ * Implements [LWPMaskValue]. These are bit mask values used with [LWPMask].
+ */
 enum class PortFeedback(override val value: Byte) : LWPMaskValue {
     IN_PROGRESS(0x01),
     COMPLETED(0x02),
