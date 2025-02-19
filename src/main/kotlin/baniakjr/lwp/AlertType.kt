@@ -15,7 +15,17 @@ enum class AlertType(override val value: Byte) : LWPByteValue {
     /** Low Signal. Value: 0x03 */
     LOW_SIGNAL(0x03),
     /** OVER_POWER. Value: 0x04 */
-    OVER_POWER(0x04);
+    OVER_POWER(0x04),
+    /** Unknown Alert. Value 0x06
+     *
+     * Used by Control+ app with LEGO Porsche 42176 (LEGO Technic Move Hub 88019)
+     */
+    ALERT_0x06(0x06),
+    /** Unknown Alert. Value 0x07
+     *
+     * Used by Control+ app with LEGO Porsche 42176 (LEGO Technic Move Hub 88019)
+     */
+    ALERT_0x07(0x07);
 
     companion object {
         const val MSG_WO_DATA_LENGTH: Int = 5
