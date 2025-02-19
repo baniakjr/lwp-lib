@@ -92,7 +92,7 @@ object LWP {
     @JvmStatic
     fun getHubPropertyCommand(property: HubProperty): ByteArray {
         return createCommand(
-            listOf(
+            byteArrayOf(
                 Command.HUB_PROPERTY.value,
                 property.value,
                 HubPropertyOperation.REQUEST_UPDATE.value
@@ -201,10 +201,28 @@ object LWP {
     @JvmStatic
     fun portValueInformationCommand(port: Port, mode: PortInformationType = PortInformationType.VALUE): ByteArray {
         return createCommand(
-            listOf(
+            byteArrayOf(
                 Command.PORT_INFORMATION_REQUEST.value,
                 port.value,
                 mode.value
+            )
+        )
+    }
+
+    /**
+     * Returns LWP command to perform [Alert][Command.ALERT] Operation
+     * @param alertType AlertType - Alert type for which operation should be performed
+     * @param operation AlertOperation - Alert Operation used in command, default [Request Update][AlertOperation.REQUEST_UPDATE]
+     * @return ByteArray LWP Command
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun alertCommand(alertType: AlertType, operation: AlertOperation = AlertOperation.REQUEST_UPDATE): ByteArray {
+        return createCommand(
+            byteArrayOf(
+                Command.ALERT.value,
+                alertType.value,
+                operation.value
             )
         )
     }
@@ -321,6 +339,17 @@ object LWP {
     }
 
     /**
+     * Returns command build from command type and values with proper header
+     * @param command Command - Command type
+     * @param message ByteArray - Command value
+     * @return ByteArray - Command
+     */
+    @JvmStatic
+    fun createCommand(command: Command, message: ByteArray): ByteArray {
+        return createCommand(byteArrayOf(command.value) + message)
+    }
+
+    /**
      * Convert byteArray to String
      * @param byteArray ByteArray - Bytes to convert
      * @return String - Bytes converted String
@@ -353,7 +382,7 @@ object LWP {
         return (bytes[1].toInt() and 0xff shl 8) or (bytes[0].toInt() and 0xff)
     }
 
-    private fun createCommand(args: List<Byte>): ByteArray {
+    private fun createCommand(args: ByteArray): ByteArray {
         val size = (args.size + 2.toByte()).toByte()
         val command = ByteArray(size.toInt())
         command[0] = size
@@ -376,7 +405,7 @@ object LWP {
         commandArguments.add(action.value)
         commandArguments.add(subCommand.value)
         commandArguments.addAll(args)
-        return createCommand(commandArguments)
+        return createCommand(commandArguments.toByteArray())
     }
 
     private fun portOutputWriteDirectCommand(
