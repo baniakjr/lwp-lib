@@ -36,4 +36,11 @@ enum class PortOutputSubCommand(override val value: Byte) : LWPByteValue {
     WRITE_DIRECT(0x50),
     /** Write Direct Mode. Value: 0x51 */
     WRITE_DIRECT_MODE(0x51);
+
+    companion object {
+        const val IN_MESSAGE_INDEX: Int = 5
+
+        const val LENGTH_WO_PAYLOAD: Int = 6
+    }
+
 }

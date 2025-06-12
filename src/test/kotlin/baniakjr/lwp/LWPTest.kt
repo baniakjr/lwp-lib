@@ -13,18 +13,18 @@ class LWPTest {
     fun intFrom2ByteArray() {
         val inputArray = byteArrayOf(0x02, 0x01)
 
-        val result = LWP.int16From2ByteArray(inputArray)
+        val result = LWP.convertToInt16(inputArray)
 
         assertThat(result).isEqualTo(258)
     }
 
     @Test
     fun intFrom4ByteArray() {
-        val inputArray = byteArrayOf(0x01, 0x02, 0x03, 0x04)
+        val inputArray = byteArrayOf(0x20,0x00, 0x00,0x00)
 
-        val result = LWP.int32From4ByteArray(inputArray)
+        val result = LWP.convertToInt32(inputArray)
 
-        assertThat(result).isEqualTo(16909060)
+        assertThat(result).isEqualTo(32)
     }
 
     @Test
@@ -253,6 +253,14 @@ class LWPTest {
     }
 
     @ParameterizedTest
+    @MethodSource("getVersionData")
+    fun convertToVersionNumber(expectedVersion: String, inputArray: ByteArray) {
+        val result = LWP.convertToVersionNumber(inputArray)
+
+        assertThat(result).isEqualTo(expectedVersion)
+    }
+
+    @ParameterizedTest
     @MethodSource("getSetPowerModeData")
     fun setPortPower(port: Port, power: Byte, mode : PortMode) {
         val expectedArray = byteArrayOf(
@@ -372,9 +380,9 @@ class LWPTest {
         @JvmStatic
         fun getLWPVersionData(): List<Arguments> {
             return listOf(
-                Arguments.of("1.0", byteArrayOf(0x01, 0x00)),
-                Arguments.of("16.21", byteArrayOf(0x10, 0x15)),
-                Arguments.of("0.16", byteArrayOf(0x00, 0x10))
+                Arguments.of("1.0", byteArrayOf(0x00, 0x01)),
+                Arguments.of("16.21", byteArrayOf(0x15, 0x10)),
+                Arguments.of("0.16", byteArrayOf(0x10, 0x00))
             )
         }
 

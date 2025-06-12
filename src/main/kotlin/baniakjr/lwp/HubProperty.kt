@@ -43,27 +43,27 @@ enum class HubProperty(override val value: Byte) : LWPByteValue {
      *
      * Used by Control+ app with LEGO Porsche 42176 (LEGO Technic Move Hub 88019)
      */
-    HUB_PROPERT_0x10(0x10),
+    HUB_PROPERT_10(0x10),
     /** Unknown Hub Property. Value 0x11
      *
      * Used by Control+ app with LEGO Porsche 42176 (LEGO Technic Move Hub 88019)
      */
-    HUB_PROPERT_0x11(0x11),
+    HUB_PROPERT_11(0x11),
     /** Unknown Hub Property. Value 0x13
      *
      * Used by Control+ app with LEGO Porsche 42176 (LEGO Technic Move Hub 88019)
      */
-    HUB_PROPERT_0x13(0x13),
+    HUB_PROPERT_13(0x13),
     /** Unknown Hub Property. Value 0x14
      *
      * Used by Control+ app with LEGO Porsche 42176 (LEGO Technic Move Hub 88019)
      */
-    HUB_PROPERT_0x14(0x14),
+    HUB_PROPERT_14(0x14),
     /** Unknown Hub Property. Value 0x15
      *
      * Used by Control+ app with LEGO Porsche 42176 (LEGO Technic Move Hub 88019)
      */
-    HUB_PROPERT_0x15(0x15);
+    HUB_PROPERT_15(0x15);
 
     companion object {
         const val MSG_WO_DATA_LENGTH: Int = 5
