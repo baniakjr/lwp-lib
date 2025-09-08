@@ -9,11 +9,17 @@ package baniakjr.lwp
  * @property value The byte value of the operation.
  */
 enum class HubPropertyOperation(override val value: Byte) : LWPByteValue {
+    /** Set property. Value: 0x01 */
     SET(0x01),
+    /** Enable updates. Value: 0x02 */
     ENABLE_UPDATES(0x02),
+    /** Disable updates. Value: 0x03 */
     DISABLE_UPDATES(0x03),
+    /** Reset property. Value: 0x04 */
     RESET(0x04),
+    /** Request update. Value: 0x05 */
     REQUEST_UPDATE(0x05),
+    /** Update property. Value: 0x06 */
     UPDATE(0x06);
 
     companion object {

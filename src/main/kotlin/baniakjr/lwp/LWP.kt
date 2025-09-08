@@ -1,5 +1,7 @@
 package baniakjr.lwp
 
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.nio.charset.StandardCharsets
 import java.util.*
 
@@ -33,7 +35,7 @@ object LWP {
      */
     const val MESSAGE_HEADER: Byte = 0x00
 
-    const val MINIMAL_MSG_LENGTH: Int = 4
+    const val MINIMAL_MSG_LENGTH: Int = 3
 
     const val MAX_POWER: Int = 100
     const val MIN_POWER: Int = 0
@@ -41,6 +43,8 @@ object LWP {
     const val FLOAT: Byte = 0
     const val HOLD: Byte = 126
     const val BREAK: Byte = 127
+
+    private val hexFormatter: HexFormat = HexFormat.of().withUpperCase().withDelimiter(":")
 
     /**
      * Creates command to set the 6 leds light brightness
@@ -188,7 +192,28 @@ object LWP {
         val build =
             ((versionByte1.toInt() shr 4) * 1000) + ((versionByte1.toInt() and 0xf) * 100) + ((versionByte0.toInt() shr 4) * 10) + (versionByte0.toInt() and 0xf)
 
-        return String.format(Locale.getDefault(), "%d.%d.%d.%d", major, minor, bugfix, build)
+        return "$major.$minor.$bugfix.$build"
+    }
+
+    /**
+     * Convert HubPropertyCommand payload to version number string
+     * Used for FW and HW version
+     * @param payload ByteArray - payload 4 byte
+     * @return String - Version number
+     */
+    @JvmStatic
+    fun convertToVersionNumber(payload: ByteArray): String {
+        if (payload.size != 4) {
+            return ""
+        }
+
+        val major = payload[3].toInt() shr 4
+        val minor = payload[3].toInt() and 0xf
+        val bugfix = ((payload[2].toInt() shr 4) * 10) + (payload[2].toInt() and 0xf)
+        val build =
+            ((payload[1].toInt() shr 4) * 1000) + ((payload[1].toInt() and 0xf) * 100) + ((payload[0].toInt() shr 4) * 10) + (payload[0].toInt() and 0xf)
+
+        return "$major.$minor.$bugfix.$build"
     }
 
     /**
@@ -276,11 +301,24 @@ object LWP {
      * @return String - LWP Version
      */
     @JvmStatic
-    fun processLWPVersion(message: ByteArray): String? {
+    fun processLWPVersion(message: ByteArray): String {
         if (message.size < HubProperty.MSG_WO_DATA_LENGTH + 2) {
-            return null
+            return ""
         }
-        return String.format(Locale.getDefault(), "%d.%d", message[HubProperty.DATA_START_INDEX], message[HubProperty.DATA_START_INDEX + 1])
+        return String.format(Locale.getDefault(), "%d.%d", message[HubProperty.DATA_START_INDEX + 1], message[HubProperty.DATA_START_INDEX])
+    }
+
+    /**
+     * Returns LWP version decoded from byteArray
+     * @param message ByteArray - Bytes to convert, should be at least 2 bytes
+     * @return String - LWP Version
+     */
+    @JvmStatic
+    fun convertToLWPVersion(message: ByteArray): String {
+        if (message.size < 2) {
+            return ""
+        }
+        return String.format(Locale.getDefault(), "%d.%d", message[1], message[0])
     }
 
     /**
@@ -294,7 +332,7 @@ object LWP {
             return null
         }
         val versionBytes = Arrays.copyOfRange(message, 4, 6)
-        return int16From2ByteArray(versionBytes) / 1000f
+        return convertToInt16(versionBytes) / 1000f
     }
 
     /**
@@ -308,7 +346,7 @@ object LWP {
             return null
         }
         val versionBytes = Arrays.copyOfRange(message, 4, 6)
-        return int16From2ByteArray(versionBytes) / 10f
+        return convertToInt16(versionBytes) / 10f
     }
 
     /**
@@ -330,12 +368,12 @@ object LWP {
      * @return String - Hub name
      */
     @JvmStatic
-    fun processHubName(message: ByteArray): String? {
+    fun processHubName(message: ByteArray): String {
         if (message.size < HubProperty.MSG_WO_DATA_LENGTH + 1) {
-            return null
+            return ""
         }
         val nameBytes = Arrays.copyOfRange(message, HubProperty.DATA_START_INDEX, message.size)
-        return stringFromByteArray(nameBytes)
+        return convertToString(nameBytes)
     }
 
     /**
@@ -355,21 +393,28 @@ object LWP {
      * @return String - Bytes converted String
      */
     @JvmStatic
-    fun stringFromByteArray(byteArray: ByteArray): String {
+    fun convertToString(byteArray: ByteArray): String {
         return String(byteArray, StandardCharsets.UTF_8)
     }
 
     /**
-     * Convert 4 bytes to int32
+     * Convert bytes to float, little endian
+     * @param bytes ByteArray - Bytes to convert, should be at least 4 bytes
+     * @return Int - Bytes converted float
+     */
+    @JvmStatic
+    fun convertToFloat(bytes: ByteArray): Float {
+        return ByteBuffer.wrap(bytes.copyOf(4)).order(ByteOrder.LITTLE_ENDIAN).getFloat()
+    }
+
+    /**
+     * Convert 4 bytes to int32, little endian
      * @param bytes ByteArray - Bytes to convert, should be at least 4 bytes
      * @return Int - Bytes converted int32
      */
     @JvmStatic
-    fun int32From4ByteArray(bytes: ByteArray): Int {
-        return (bytes[0].toInt() shl 24) or
-                (bytes[1].toInt() shl 16) or
-                (bytes[2].toInt() shl 8) or
-                bytes[3].toInt()
+    fun convertToInt32(bytes: ByteArray): Int {
+        return ByteBuffer.wrap(bytes.copyOf(4)).order(ByteOrder.LITTLE_ENDIAN).getInt()
     }
 
     /**
@@ -378,11 +423,58 @@ object LWP {
      * @return Int - Bytes converted int16
      */
     @JvmStatic
-    fun int16From2ByteArray(bytes: ByteArray): Int {
-        return (bytes[1].toInt() and 0xff shl 8) or (bytes[0].toInt() and 0xff)
+    fun convertToInt16(bytes: ByteArray): Int {
+        val paddedBytes = bytes.copyOf(2)
+        return (paddedBytes[1].toInt() and 0xff shl 8) or (paddedBytes[0].toInt() and 0xff)
     }
 
-    private fun createCommand(args: ByteArray): ByteArray {
+    /**
+     * Converts byteArray to Hexadecimal string representation
+     * @param bytes ByteArray - Bytes to convert
+     * @return String - Hexadecimal representation of byteArray
+     */
+    @JvmStatic
+    fun convertToHexString(bytes: ByteArray): String {
+        return hexFormatter.formatHex(bytes)
+    }
+
+    /**
+     * Converts byte to Hexadecimal string representation
+     * @param byte ByteArray - Byte to convert
+     * @return String - Hexadecimal representation of byte
+     */
+    @JvmStatic
+    fun convertToHexString(byte: Byte): String {
+        return hexFormatter.toHexDigits(byte)
+    }
+
+    /**
+     * Converts byteArray to Binary string representation
+     * @param bytes ByteArray - Bytes to convert
+     * @return String - Binary representation of byteArray
+     */
+    @JvmStatic
+    fun convertToBinaryString(bytes: ByteArray): String {
+        return bytes.joinToString(separator = " ") { it.toString(2).padStart(8, '0') }
+    }
+
+    /**
+     * Converts byte to Binary string representation
+     * @param byte ByteArray - Byte to convert
+     * @return String - Binary representation of byte
+     */
+    @JvmStatic
+    fun convertToBinaryString(byte: Byte): String {
+        return byte.toString(2).padStart(8, '0')
+    }
+
+    /**
+     * Returns command build from args with proper header
+     * @param args ByteArray - Command value
+     * @return ByteArray - Command
+     */
+    @JvmStatic
+    fun createCommand(args: ByteArray): ByteArray {
         val size = (args.size + 2.toByte()).toByte()
         val command = ByteArray(size.toInt())
         command[0] = size

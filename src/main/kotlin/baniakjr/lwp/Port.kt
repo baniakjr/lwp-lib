@@ -30,7 +30,7 @@ enum class Port(override val value: Byte) : LWPByteValue {
      * 
      * Used by Control+ app with LEGO Porsche 42176 (LEGO Technic Move Hub 88019)
      */
-    PORT_0x3D(0x3D),
+    PORT_3D(0x3D),
     /** GEST. Value: 0x3E */
     GEST(0x3E),
     /** Hub LED. Value: 0x3F */

@@ -29,7 +29,9 @@ class LWPMask<T : LWPMaskValue?> : LWPByteValue {
     }
 
     companion object {
-        fun <R> fromByte(lwpMaskClass: Class<R>, byteValue: Byte): LWPMask<R> where R : Enum<R>?, R : LWPMaskValue? {
+
+        @JvmStatic
+        fun <R> fromByte(lwpMaskClass: Class<R>, byteValue: Byte): LWPMask<R> where R : Enum<R>, R : LWPMaskValue {
             val foundValues: MutableList<R> = ArrayList()
             if (lwpMaskClass.enumConstants != null) {
                 for (lwpMaskValue in lwpMaskClass.enumConstants) {

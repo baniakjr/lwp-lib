@@ -8,7 +8,7 @@ package baniakjr.lwp
  *
  * @property value The byte value of the information type.
  */
-enum class InformationType(override val value: Byte) : LWPByteValue {
+enum class ModeInformationType(override val value: Byte) : LWPByteValue {
 
     /** Name. Value: 0x00 */
     NAME(0x00),
@@ -32,5 +32,7 @@ enum class InformationType(override val value: Byte) : LWPByteValue {
     companion object {
         /** Index of information type byte in [Port Mode Information Request message][Command.PORT_MODE_INFORMATION_REQUEST] */
         const val IN_MESSAGE_INDEX: Int = 5
+        const val LENGTH_WO_DATA: Int = 6
+        const val DATA_START_INDEX: Int = 6
     }
 }

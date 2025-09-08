@@ -16,4 +16,8 @@ enum class StartupCompletion(override val value: Byte) : LWPByteValue {
     IMMEDIATE_NO_FEEDBACK(0x10),
     /** Execute command immediately with feedback. Value: 0x11 */
     IMMEDIATE_WITH_FEEDBACK(0x11);
+
+    companion object {
+        const val IN_MESSAGE_INDEX: Int = 4
+    }
 }
