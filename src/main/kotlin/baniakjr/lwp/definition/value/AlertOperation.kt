@@ -1,4 +1,6 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition.value
+
+import baniakjr.lwp.definition.LWPByteValue
 
 /**
  * Enum class representing Alert Operations for [Hub Alert Command][Command.ALERT]

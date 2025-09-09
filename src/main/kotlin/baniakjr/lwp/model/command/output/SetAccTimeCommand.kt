@@ -1,9 +1,9 @@
 package baniakjr.lwp.model.command.output
 
-import baniakjr.lwp.LWPByteValue.Companion.wrap
-import baniakjr.lwp.Port
-import baniakjr.lwp.PortOutputSubCommand
-import baniakjr.lwp.StartupCompletion
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.value.Port
+import baniakjr.lwp.definition.value.PortOutputSubCommand
+import baniakjr.lwp.definition.value.StartupCompletion
 import baniakjr.lwp.model.Wrapper
 
 class SetAccTimeCommand internal constructor(

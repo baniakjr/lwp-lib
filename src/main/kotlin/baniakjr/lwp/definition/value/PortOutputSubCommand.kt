@@ -1,4 +1,6 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition.value
+
+import baniakjr.lwp.definition.LWPByteValue
 
 /**
  * Port output subcommand used with [Port Output Command][Command.PORT_OUTPUT]

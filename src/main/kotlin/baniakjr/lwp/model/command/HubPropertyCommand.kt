@@ -1,10 +1,10 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.Command
-import baniakjr.lwp.HubProperty
-import baniakjr.lwp.HubPropertyOperation
 import baniakjr.lwp.LWP
-import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.value.Command
+import baniakjr.lwp.definition.value.HubProperty
+import baniakjr.lwp.definition.value.HubPropertyOperation
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand

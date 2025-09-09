@@ -1,10 +1,10 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.Command
-import baniakjr.lwp.LWPByteValue.Companion.wrap
-import baniakjr.lwp.LWPMask
-import baniakjr.lwp.Port
-import baniakjr.lwp.PortFeedback
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.LWPMask
+import baniakjr.lwp.definition.mask.PortFeedback
+import baniakjr.lwp.definition.value.Command
+import baniakjr.lwp.definition.value.Port
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand

@@ -1,8 +1,10 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition.mask
+
+import baniakjr.lwp.definition.LWPMaskValue
 
 /**
  * Port feedback values.
- * Implements [LWPMaskValue]. These are bit mask values used with [LWPMask].
+ * Implements [LWPMaskValue]. These are bit mask values used with [baniakjr.lwp.definition.LWPMask].
  *
  * @property value The byte value of the enum.
  */

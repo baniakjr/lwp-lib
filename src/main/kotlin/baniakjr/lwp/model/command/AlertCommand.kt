@@ -1,10 +1,10 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.AlertOperation
-import baniakjr.lwp.AlertType
-import baniakjr.lwp.Command
 import baniakjr.lwp.LWP
-import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.value.AlertOperation
+import baniakjr.lwp.definition.value.AlertType
+import baniakjr.lwp.definition.value.Command
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand

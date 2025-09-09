@@ -1,6 +1,19 @@
 package baniakjr.lwp
 
-import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.LWPMask
+import baniakjr.lwp.definition.mask.PlayVmOperation
+import baniakjr.lwp.definition.mask.SixLed
+import baniakjr.lwp.definition.mode.PortMode
+import baniakjr.lwp.definition.value.AlertOperation
+import baniakjr.lwp.definition.value.AlertType
+import baniakjr.lwp.definition.value.Command
+import baniakjr.lwp.definition.value.HubLedColor
+import baniakjr.lwp.definition.value.HubProperty
+import baniakjr.lwp.definition.value.Port
+import baniakjr.lwp.definition.value.PortInformationType
+import baniakjr.lwp.definition.value.PortOutputSubCommand
+import baniakjr.lwp.definition.value.StartupCompletion
 import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.command.AlertCommand
 import baniakjr.lwp.model.command.GenericCommand
@@ -219,9 +232,9 @@ object LWP {
     }
 
     /**
-     * Returns LWP command to perform [Alert][Command.ALERT] Operation
+     * Returns LWP command to perform [Alert][baniakjr.lwp.definition.value.Command.ALERT] Operation
      * @param alertType AlertType - Alert type for which operation should be performed
-     * @param operation AlertOperation - Alert Operation used in command, default [Request Update][AlertOperation.REQUEST_UPDATE]
+     * @param operation AlertOperation - Alert Operation used in command, default [Request Update][baniakjr.lwp.definition.value.AlertOperation.REQUEST_UPDATE]
      * @return ByteArray LWP Command
      */
     @JvmOverloads

@@ -1,4 +1,6 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition.mode
+
+import baniakjr.lwp.definition.Mode
 
 /**
  * Enum class representing the different modes of the port.

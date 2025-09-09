@@ -1,8 +1,8 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.Command
 import baniakjr.lwp.LWP
-import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.value.Command
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.Wrapper

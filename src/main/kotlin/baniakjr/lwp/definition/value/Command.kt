@@ -1,4 +1,6 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition.value
+
+import baniakjr.lwp.definition.LWPByteValue
 
 /**
  * Command byte values for LWP messages

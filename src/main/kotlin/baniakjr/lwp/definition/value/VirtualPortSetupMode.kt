@@ -1,4 +1,6 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition.value
+
+import baniakjr.lwp.definition.LWPByteValue
 
 /**
  * Enum representing mode of [virtual port setup command][Command.VIRTUAL_PORT_SETUP]

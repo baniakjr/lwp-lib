@@ -1,8 +1,10 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition.mask
+
+import baniakjr.lwp.definition.LWPMaskValue
 
 /**
- * Enum class representing the six LEDs on the Move Hub that can be used in commands for the [Six LED port][Port.SIX_LED].
- * Implements [LWPMaskValue]. These are bit mask values used with [LWPMask].
+ * Enum class representing the six LEDs on the Move Hub that can be used in commands for the [Six LED port][baniakjr.lwp.definition.value.Port.SIX_LED].
+ * Implements [LWPMaskValue]. These are bit mask values used with [baniakjr.lwp.definition.LWPMask].
  *
  * @property value The byte value of the enum.
  */

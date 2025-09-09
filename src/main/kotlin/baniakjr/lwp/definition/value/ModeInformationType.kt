@@ -1,4 +1,6 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition.value
+
+import baniakjr.lwp.definition.LWPByteValue
 
 /**
  * Enum class representing the different types of mode information that can be requested by [Port Mode Information Request][Command.PORT_MODE_INFORMATION_REQUEST].

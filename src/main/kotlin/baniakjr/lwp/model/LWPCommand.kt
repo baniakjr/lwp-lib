@@ -1,10 +1,10 @@
 package baniakjr.lwp.model
 
-import baniakjr.lwp.Command
 import baniakjr.lwp.LWP
 import baniakjr.lwp.LWP.MESSAGE_HEADER
-import baniakjr.lwp.LWPByteValue
-import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.LWPByteValue
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.value.Command
 import baniakjr.lwp.model.command.AlertCommand
 import baniakjr.lwp.model.command.AttachedIOCommand
 import baniakjr.lwp.model.command.ErrorCommand

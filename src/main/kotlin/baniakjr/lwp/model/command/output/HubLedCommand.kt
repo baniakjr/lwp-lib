@@ -1,11 +1,11 @@
 package baniakjr.lwp.model.command.output
 
-import baniakjr.lwp.HubLedColor
-import baniakjr.lwp.HubLedMode
-import baniakjr.lwp.LWPByteValue.Companion.wrap
-import baniakjr.lwp.Port
-import baniakjr.lwp.PortMode
-import baniakjr.lwp.StartupCompletion
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.mode.HubLedMode
+import baniakjr.lwp.definition.mode.PortMode
+import baniakjr.lwp.definition.value.HubLedColor
+import baniakjr.lwp.definition.value.Port
+import baniakjr.lwp.definition.value.StartupCompletion
 import baniakjr.lwp.model.Wrapper
 
 class HubLedCommand internal constructor(action: Wrapper<StartupCompletion>,

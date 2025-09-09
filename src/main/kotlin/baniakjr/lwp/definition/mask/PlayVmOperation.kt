@@ -1,8 +1,10 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition.mask
+
+import baniakjr.lwp.definition.LWPMaskValue
 
 /**
- * Enum class representing the possible operations that can be used in commands for the [Play VM port][Port.PLAYVM].
- * Implements [LWPMaskValue]. These are bit mask values used with [LWPMask].
+ * Enum class representing the possible operations that can be used in commands for the [Play VM port][baniakjr.lwp.definition.value.Port.PLAYVM].
+ * Implements [LWPMaskValue]. These are bit mask values used with [baniakjr.lwp.definition.LWPMask].
  */
 enum class PlayVmOperation(override val value: Byte) : LWPMaskValue {
 

@@ -1,4 +1,6 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition.value
+
+import baniakjr.lwp.definition.LWPByteValue
 
 /**
  * Enum class representing the different types of information that can be requested from a port by [Port Information Request][Command.PORT_INFORMATION_REQUEST]

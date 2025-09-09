@@ -1,7 +1,7 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.Command
 import baniakjr.lwp.LWP
+import baniakjr.lwp.definition.value.Command
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.Wrapper
 
