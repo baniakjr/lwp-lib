@@ -1,9 +1,22 @@
 package baniakjr.lwp
 
+import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
+import baniakjr.lwp.model.command.AlertCommand
+import baniakjr.lwp.model.command.GenericCommand
+import baniakjr.lwp.model.command.HubPropertyCommand
+import baniakjr.lwp.model.command.PortInformationRequestCommand
+import baniakjr.lwp.model.command.output.GenericPortOutputCommand
+import baniakjr.lwp.model.command.output.HubLedCommand
+import baniakjr.lwp.model.command.output.PlayVMCommand
+import baniakjr.lwp.model.command.output.SixLedCommand
+import baniakjr.lwp.model.command.output.WriteDirectModeCommand
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.charset.StandardCharsets
-import java.util.*
+import java.util.Arrays
+import java.util.HexFormat
+import java.util.Locale
 
 /**
  * LWP constants and helper functions
@@ -40,6 +53,9 @@ object LWP {
     const val MAX_POWER: Int = 100
     const val MIN_POWER: Int = 0
 
+    const val MAX_POWER_BYTES: Byte = MAX_POWER.toByte()
+    const val MIN_POWER_BYTES: Byte = MIN_POWER.toByte()
+
     const val FLOAT: Byte = 0
     const val HOLD: Byte = 126
     const val BREAK: Byte = 127
@@ -60,12 +76,7 @@ object LWP {
         value: Byte,
         startupCompletion: StartupCompletion = StartupCompletion.IMMEDIATE_NO_FEEDBACK
     ): ByteArray {
-        return portOutputWriteDirectCommand(
-            Port.SIX_LED,
-            startupCompletion,
-            PortMode.MODE_0,
-            listOf(mask.value, value)
-        )
+        return SixLedCommand.setBrightness(mask, value, startupCompletion).byteValue
     }
 
     /**
@@ -80,12 +91,7 @@ object LWP {
         color: HubLedColor,
         startupCompletion: StartupCompletion = StartupCompletion.IMMEDIATE_NO_FEEDBACK
     ): ByteArray {
-        return portOutputWriteDirectCommand(
-            Port.HUB_LED,
-            startupCompletion,
-            HubLedMode.COLOR,
-            listOf(color.value)
-        )
+        return HubLedCommand.color(color, startupCompletion).byteValue
     }
 
     /**
@@ -95,13 +101,7 @@ object LWP {
      */
     @JvmStatic
     fun getHubPropertyCommand(property: HubProperty): ByteArray {
-        return createCommand(
-            byteArrayOf(
-                Command.HUB_PROPERTY.value,
-                property.value,
-                HubPropertyOperation.REQUEST_UPDATE.value
-            )
-        )
+        return HubPropertyCommand.getValue(property).byteValue
     }
 
     /**
@@ -118,12 +118,7 @@ object LWP {
         value: Byte,
         startupCompletion: StartupCompletion = StartupCompletion.IMMEDIATE_NO_FEEDBACK
     ): ByteArray {
-        return portOutputWriteDirectCommand(
-            port,
-            startupCompletion,
-            PortMode.MODE_0,
-            listOf(value)
-        )
+        return WriteDirectModeCommand.setValue(port, byteArrayOf(value), PortMode.MODE_0, startupCompletion).byteValue
     }
 
     /**
@@ -132,7 +127,7 @@ object LWP {
      */
     @JvmStatic
     fun playVmInit(): ByteArray {
-        return setPlayVM(0.toByte(), 0.toByte(), LWPMask(PlayVmOperation.INIT))
+        return PlayVMCommand.initialize().byteValue
     }
 
     /**
@@ -142,7 +137,7 @@ object LWP {
      */
     @JvmStatic
     fun playVmAutoCalibrate(): ByteArray {
-        return setPlayVM(0.toByte(), 0.toByte(), LWPMask(PlayVmOperation.CALIBRATE))
+        return PlayVMCommand.calibrate().byteValue
     }
 
     /**
@@ -161,12 +156,7 @@ object LWP {
         vmCommand: LWPMask<PlayVmOperation>,
         startupCompletion: StartupCompletion = StartupCompletion.IMMEDIATE_NO_FEEDBACK
     ): ByteArray {
-        return portOutputWriteDirectCommand(
-            Port.PLAYVM,
-            startupCompletion,
-            PortMode.MODE_0,
-            listOf(0x03.toByte(), 0x00.toByte(), speedRaw, steer, vmCommand.value, 0x00.toByte())
-        )
+        return PlayVMCommand.build(speedRaw.toInt(), steer.toInt(), vmCommand, startupCompletion).byteValue
     }
 
     /**
@@ -225,13 +215,7 @@ object LWP {
     @JvmOverloads
     @JvmStatic
     fun portValueInformationCommand(port: Port, mode: PortInformationType = PortInformationType.VALUE): ByteArray {
-        return createCommand(
-            byteArrayOf(
-                Command.PORT_INFORMATION_REQUEST.value,
-                port.value,
-                mode.value
-            )
-        )
+        return PortInformationRequestCommand.build(port, mode).byteValue
     }
 
     /**
@@ -243,13 +227,7 @@ object LWP {
     @JvmOverloads
     @JvmStatic
     fun alertCommand(alertType: AlertType, operation: AlertOperation = AlertOperation.REQUEST_UPDATE): ByteArray {
-        return createCommand(
-            byteArrayOf(
-                Command.ALERT.value,
-                alertType.value,
-                operation.value
-            )
-        )
+        return AlertCommand.build(alertType, operation).byteValue
     }
 
     /**
@@ -268,12 +246,7 @@ object LWP {
         value: Byte,
         startupCompletion: StartupCompletion = StartupCompletion.IMMEDIATE_NO_FEEDBACK
     ): ByteArray {
-        return portOutputWriteDirectCommand(
-            port,
-            startupCompletion,
-            mode,
-            listOf(value)
-        )
+        return WriteDirectModeCommand.build(port, startupCompletion, mode, byteArrayOf(value)).byteValue
     }
 
     /**
@@ -292,7 +265,7 @@ object LWP {
         args: List<Byte>,
         startupCompletion: StartupCompletion = StartupCompletion.IMMEDIATE_NO_FEEDBACK
     ): ByteArray {
-        return portOutputCommand(port, startupCompletion, subCommand, args)
+        return GenericPortOutputCommand.build(port, startupCompletion, subCommand, args.toByteArray()).byteValue
     }
 
     /**
@@ -384,7 +357,7 @@ object LWP {
      */
     @JvmStatic
     fun createCommand(command: Command, message: ByteArray): ByteArray {
-        return createCommand(byteArrayOf(command.value) + message)
+        return GenericCommand(command.wrap(), message).byteValue
     }
 
     /**
@@ -475,40 +448,6 @@ object LWP {
      */
     @JvmStatic
     fun createCommand(args: ByteArray): ByteArray {
-        val size = (args.size + 2.toByte()).toByte()
-        val command = ByteArray(size.toInt())
-        command[0] = size
-        command[1] = MESSAGE_HEADER
-        for (i in args.indices) {
-            command[i + 2] = args[i]
-        }
-        return command
-    }
-
-    private fun portOutputCommand(
-        port: Port,
-        action: StartupCompletion,
-        subCommand: PortOutputSubCommand,
-        args: List<Byte>
-    ): ByteArray {
-        val commandArguments: MutableList<Byte> = ArrayList()
-        commandArguments.add(Command.PORT_OUTPUT.value)
-        commandArguments.add(port.value)
-        commandArguments.add(action.value)
-        commandArguments.add(subCommand.value)
-        commandArguments.addAll(args)
-        return createCommand(commandArguments.toByteArray())
-    }
-
-    private fun portOutputWriteDirectCommand(
-        port: Port,
-        action: StartupCompletion,
-        portMode: Mode,
-        args: List<Byte>
-    ): ByteArray {
-        val commandArguments: MutableList<Byte> = ArrayList()
-        commandArguments.add(portMode.value)
-        commandArguments.addAll(args)
-        return portOutputCommand(port, action, PortOutputSubCommand.WRITE_DIRECT_MODE, commandArguments)
+        return  args.createCommand()
     }
 }

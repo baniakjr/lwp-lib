@@ -4,6 +4,7 @@ import baniakjr.lwp.Command
 import baniakjr.lwp.LWP
 import baniakjr.lwp.LWPByteValue.Companion.wrap
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
@@ -13,7 +14,7 @@ class HubActionCommand internal constructor(val actionType: Byte) : LWPCommand {
 
     override val byteValue: ByteArray
         get() {
-            return LWP.createCommand(byteArrayOf(command.value, actionType))
+            return byteArrayOf(command.value, actionType).createCommand()
         }
 
     companion object {

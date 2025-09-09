@@ -6,6 +6,7 @@ import baniakjr.lwp.LWPByteValue.Companion.wrap
 import baniakjr.lwp.Port
 import baniakjr.lwp.PortInformationType
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
@@ -19,7 +20,7 @@ class CombinationPortInformationCommand internal constructor(
     override val byteValue: ByteArray
         get() {
             val combArray = combinations.map { it.asArray() }.fold(byteArrayOf()){ acc, next -> acc + next }
-            return LWP.createCommand(byteArrayOf(command.value, port.value, PortInformationType.COMBINATIONS.value) + combArray)
+            return (byteArrayOf(command.value, port.value, PortInformationType.COMBINATIONS.value) + combArray).createCommand()
         }
 
     companion object {

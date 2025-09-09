@@ -1,6 +1,10 @@
 package baniakjr.lwp.model.command.mode
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
+import baniakjr.lwp.LWP
+import baniakjr.lwp.ModeInformationType
+import baniakjr.lwp.Port
+import baniakjr.lwp.PortMode
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper

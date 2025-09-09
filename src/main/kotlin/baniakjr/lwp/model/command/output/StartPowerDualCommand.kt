@@ -1,7 +1,11 @@
 package baniakjr.lwp.model.command.output
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
+import baniakjr.lwp.LWP
 import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.Port
+import baniakjr.lwp.PortOutputSubCommand
+import baniakjr.lwp.StartupCompletion
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
@@ -46,7 +50,7 @@ class StartPowerDualCommand internal constructor(
          * Build a StartPowerDualCommand with powerA and powerB as Int.
          */
         @JvmStatic
-        fun build(
+        fun setPower(
             port: Port,
             action: StartupCompletion,
             powerA: Int,
@@ -59,7 +63,7 @@ class StartPowerDualCommand internal constructor(
          * Build a StartPowerDualCommand with HOLD value.
          */
         @JvmStatic
-        fun buildHold(
+        fun setHold(
             port: Port,
             action: StartupCompletion
         ): StartPowerDualCommand {
@@ -70,7 +74,7 @@ class StartPowerDualCommand internal constructor(
          * Build a StartPowerDualCommand with BREAK value.
          */
         @JvmStatic
-        fun buildBreak(
+        fun setBreak(
             port: Port,
             action: StartupCompletion
         ): StartPowerDualCommand {

@@ -1,8 +1,12 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
+import baniakjr.lwp.LWP
 import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.Port
+import baniakjr.lwp.PortMode
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
@@ -20,7 +24,7 @@ class PortInputFormatCommand internal constructor(
 
     override val byteValue: ByteArray
         get() {
-            return LWP.createCommand(byteArrayOf(command.value, port.value, mode.value) + delta + (if(notification) 0x01 else 0x00))
+            return (byteArrayOf(command.value, port.value, mode.value) + delta + (if(notification) 0x01 else 0x00)).createCommand()
         }
 
     companion object {

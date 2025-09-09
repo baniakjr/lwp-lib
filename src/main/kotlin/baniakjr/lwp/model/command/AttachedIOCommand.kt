@@ -1,8 +1,12 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
+import baniakjr.lwp.IOEvent
+import baniakjr.lwp.LWP
 import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.Port
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
@@ -29,10 +33,10 @@ class AttachedIOCommand internal constructor(val port: Wrapper<Port>,
     override val byteValue: ByteArray
         get() {
             return when(event.enum) {
-                IOEvent.DETACHED -> LWP.createCommand(byteArrayOf(command.value, port.value, event.value))
-                IOEvent.ATTACHED -> LWP.createCommand(byteArrayOf(command.value, port.value, event.value) + ioType + hwRev + swRev)
-                IOEvent.ATTACHED_VIRTUAL -> LWP.createCommand(byteArrayOf(command.value, port.value, event.value) + ioType + byteArrayOf(portA.value, portB.value))
-                else -> LWP.createCommand(byteArrayOf(command.value, port.value, event.value))
+                IOEvent.DETACHED -> byteArrayOf(command.value, port.value, event.value).createCommand()
+                IOEvent.ATTACHED -> (byteArrayOf(command.value, port.value, event.value) + ioType + hwRev + swRev).createCommand()
+                IOEvent.ATTACHED_VIRTUAL -> (byteArrayOf(command.value, port.value, event.value) + ioType + byteArrayOf(portA.value, portB.value)).createCommand()
+                else -> byteArrayOf(command.value, port.value, event.value).createCommand()
             }
         }
 
@@ -51,8 +55,10 @@ class AttachedIOCommand internal constructor(val port: Wrapper<Port>,
             val event = Wrapper.wrap(IOEvent::class.java, byteArray[IOEvent.IN_MESSAGE_INDEX])
             return when(size) {
                 IOEvent.DETACHED_MSG_LENGTH -> AttachedIOCommand(port, event)
-                IOEvent.ATTACHED_MSG_LENGTH -> AttachedIOCommand(port, event, byteArray.copyOfRange(IOEvent.IO_TYPE_IN_MESSAGE_INDEX, IOEvent.IO_TYPE_IN_MESSAGE_INDEX+2), hwRev = byteArray.copyOfRange(IOEvent.HW_REV_IN_MESSAGE_INDEX, IOEvent.HW_REV_IN_MESSAGE_INDEX+4), swRev = byteArray.copyOfRange(IOEvent.SW_REV_IN_MESSAGE_INDEX, IOEvent.SW_REV_IN_MESSAGE_INDEX+4))
-                IOEvent.ATTACHED_VIRTUAL_MSG_LENGTH -> AttachedIOCommand(port, event, byteArray.copyOfRange(IOEvent.IO_TYPE_IN_MESSAGE_INDEX, IOEvent.IO_TYPE_IN_MESSAGE_INDEX+2), Wrapper.wrap(Port::class.java, byteArray[IOEvent.V_PORT_A_IN_MESSAGE_INDEX]), Wrapper.wrap(Port::class.java, byteArray[IOEvent.V_PORT_B_IN_MESSAGE_INDEX]))
+                IOEvent.ATTACHED_MSG_LENGTH -> AttachedIOCommand(port, event, byteArray.copyOfRange(IOEvent.IO_TYPE_IN_MESSAGE_INDEX, IOEvent.IO_TYPE_IN_MESSAGE_INDEX+2), hwRev = byteArray.copyOfRange(
+                    IOEvent.HW_REV_IN_MESSAGE_INDEX, IOEvent.HW_REV_IN_MESSAGE_INDEX+4), swRev = byteArray.copyOfRange(IOEvent.SW_REV_IN_MESSAGE_INDEX, IOEvent.SW_REV_IN_MESSAGE_INDEX+4))
+                IOEvent.ATTACHED_VIRTUAL_MSG_LENGTH -> AttachedIOCommand(port, event, byteArray.copyOfRange(IOEvent.IO_TYPE_IN_MESSAGE_INDEX, IOEvent.IO_TYPE_IN_MESSAGE_INDEX+2), Wrapper.wrap(
+                    Port::class.java, byteArray[IOEvent.V_PORT_A_IN_MESSAGE_INDEX]), Wrapper.wrap(Port::class.java, byteArray[IOEvent.V_PORT_B_IN_MESSAGE_INDEX]))
                 else -> MalformedCommand(byteArray)
             }
         }

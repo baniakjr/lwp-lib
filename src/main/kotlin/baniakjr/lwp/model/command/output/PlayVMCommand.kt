@@ -1,17 +1,23 @@
 package baniakjr.lwp.model.command.output
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
+import baniakjr.lwp.LWP
 import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.LWPMask
+import baniakjr.lwp.PlayVmOperation
+import baniakjr.lwp.Port
+import baniakjr.lwp.PortMode
+import baniakjr.lwp.PortOutputSubCommand
+import baniakjr.lwp.StartupCompletion
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 import baniakjr.lwp.model.command.MalformedCommand
 
-class PlayVMWriteDirectModeCommand internal constructor(port: Wrapper<Port>,
-                                                        action: Wrapper<StartupCompletion>,
-                                                        mode: Wrapper<PortMode>,
-                                                        modePayload: ByteArray
-) : WriteDirectModeCommand(port, action, mode, modePayload) {
+open class PlayVMCommand internal constructor(action: Wrapper<StartupCompletion>,
+                                              mode: Wrapper<PortMode>,
+                                              modePayload: ByteArray
+) : WriteDirectModeCommand(Port.PLAYVM.wrap(), action, mode, modePayload) {
 
     val speed: Byte?
         get() {
@@ -52,18 +58,29 @@ class PlayVMWriteDirectModeCommand internal constructor(port: Wrapper<Port>,
             val action = Wrapper.wrap(StartupCompletion::class.java, byteArray[StartupCompletion.IN_MESSAGE_INDEX])
             val mode = Wrapper.wrap(PortMode::class.java, byteArray[6])
             val modePayload = byteArray.copyOfRange(7, byteArray.size)
-            return PlayVMWriteDirectModeCommand(port, action, mode, modePayload)
+            return PlayVMCommand(action, mode, modePayload)
         }
 
         @JvmStatic
+        @JvmOverloads
         fun build(
-            action: StartupCompletion,
             speed: Int,
             steer: Int,
-            options: LWPMask<PlayVmOperation>
-        ): PlayVMWriteDirectModeCommand {
+            options: LWPMask<PlayVmOperation>,
+            action: StartupCompletion = StartupCompletion.IMMEDIATE_NO_FEEDBACK
+        ): PlayVMCommand {
             val payload = byteArrayOf(0x03, 0x00, speed.toByte(), steer.toByte(), options.value, 0x00)
-            return PlayVMWriteDirectModeCommand(Port.PLAYVM.wrap(), action.wrap(), PortMode.MODE_0.wrap(), payload)
+            return PlayVMCommand(action.wrap(), PortMode.MODE_0.wrap(), payload)
+        }
+
+        @JvmStatic
+        fun initialize(): PlayVMCommand {
+            return build(0,0,LWPMask(PlayVmOperation.INIT))
+        }
+
+        @JvmStatic
+        fun calibrate(): PlayVMCommand {
+            return build(0,0,LWPMask(PlayVmOperation.CALIBRATE))
         }
     }
 

@@ -1,8 +1,11 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
 import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.Port
+import baniakjr.lwp.PortInformationType
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
@@ -15,7 +18,7 @@ class PortInformationRequestCommand internal constructor(
 
     override val byteValue: ByteArray
         get() {
-            return LWP.createCommand(byteArrayOf(command.value, port.value, informationType.value))
+            return byteArrayOf(command.value, port.value, informationType.value).createCommand()
         }
 
     companion object {
@@ -29,6 +32,11 @@ class PortInformationRequestCommand internal constructor(
         @JvmStatic
         fun build(port: Port, informationType: PortInformationType): PortInformationRequestCommand {
             return PortInformationRequestCommand(port.wrap(), informationType.wrap())
+        }
+
+        @JvmStatic
+        fun getValue(port: Port): PortInformationRequestCommand {
+            return build(port, PortInformationType.VALUE)
         }
     }
 

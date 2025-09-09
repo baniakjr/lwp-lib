@@ -1,7 +1,12 @@
 package baniakjr.lwp.model.command.output
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
+import baniakjr.lwp.LWP
 import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.Port
+import baniakjr.lwp.PortMode
+import baniakjr.lwp.PortOutputSubCommand
+import baniakjr.lwp.StartupCompletion
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
@@ -22,12 +27,13 @@ open class WriteDirectModeCommand internal constructor(port: Wrapper<Port>,
 
     companion object {
         internal fun fromByteArray(byteArray: ByteArray): LWPCommand {
-            if(!byteArray.isSpecificCommand(Command.PORT_OUTPUT) || !byteArray.isSpecificSubCommand(PortOutputSubCommand.WRITE_DIRECT_MODE)) {
+            if(!byteArray.isSpecificCommand(Command.PORT_OUTPUT) ||
+                !byteArray.isSpecificSubCommand(PortOutputSubCommand.WRITE_DIRECT_MODE)) {
                 return MalformedCommand(byteArray)
             }
             val port = Wrapper.wrap(Port::class.java, byteArray[Port.IN_INFORMATION_MESSAGE_INDEX])
             if(port.enum == Port.PLAYVM) {
-                return PlayVMWriteDirectModeCommand.fromByteArray(byteArray)
+                return PlayVMCommand.fromByteArray(byteArray)
             }
             val action = Wrapper.wrap(StartupCompletion::class.java, byteArray[StartupCompletion.IN_MESSAGE_INDEX])
             val mode = Wrapper.wrap(PortMode::class.java, byteArray[6])
@@ -53,6 +59,28 @@ open class WriteDirectModeCommand internal constructor(port: Wrapper<Port>,
             value: Int
         ): WriteDirectModeCommand {
             return WriteDirectModeCommand(port.wrap(), action.wrap(), mode.wrap(), byteArrayOf(value.toByte()))
+        }
+
+        @JvmStatic
+        @JvmOverloads
+        fun setPower(
+            port: Port,
+            power: Int,
+            mode: PortMode = PortMode.MODE_0,
+            action: StartupCompletion = StartupCompletion.IMMEDIATE_NO_FEEDBACK
+        ): WriteDirectModeCommand {
+            return WriteDirectModeCommand(port.wrap(), action.wrap(), mode.wrap(), byteArrayOf(power.toByte()))
+        }
+
+        @JvmStatic
+        @JvmOverloads
+        fun setValue(
+            port: Port,
+            value: ByteArray,
+            mode: PortMode = PortMode.MODE_0,
+            action: StartupCompletion = StartupCompletion.IMMEDIATE_NO_FEEDBACK
+        ): WriteDirectModeCommand {
+            return WriteDirectModeCommand(port.wrap(), action.wrap(), mode.wrap(), value)
         }
     }
 

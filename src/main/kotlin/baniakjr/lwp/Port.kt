@@ -26,8 +26,8 @@ enum class Port(override val value: Byte) : LWPByteValue {
     ORIENTATION(0x3B),
     /** Voltage meter. Value: 0x3C */
     VOLTAGE(0x3C),
-    /** Unknown port. Value: 0x3D 
-     * 
+    /** Unknown port. Value: 0x3D
+     *
      * Used by Control+ app with LEGO Porsche 42176 (LEGO Technic Move Hub 88019)
      */
     PORT_3D(0x3D),

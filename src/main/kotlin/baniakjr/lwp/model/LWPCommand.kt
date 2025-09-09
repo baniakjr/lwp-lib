@@ -2,8 +2,27 @@ package baniakjr.lwp.model
 
 import baniakjr.lwp.Command
 import baniakjr.lwp.LWP
+import baniakjr.lwp.LWP.MESSAGE_HEADER
 import baniakjr.lwp.LWPByteValue
-import baniakjr.lwp.model.command.*
+import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.model.command.AlertCommand
+import baniakjr.lwp.model.command.AttachedIOCommand
+import baniakjr.lwp.model.command.ErrorCommand
+import baniakjr.lwp.model.command.GenericCommand
+import baniakjr.lwp.model.command.HubActionCommand
+import baniakjr.lwp.model.command.HubPropertyCommand
+import baniakjr.lwp.model.command.NotCommand
+import baniakjr.lwp.model.command.PortInformationCommand
+import baniakjr.lwp.model.command.PortInformationRequestCommand
+import baniakjr.lwp.model.command.PortInputFormatCommand
+import baniakjr.lwp.model.command.PortInputFormatSetupCommand
+import baniakjr.lwp.model.command.PortModeInformationCommand
+import baniakjr.lwp.model.command.PortModeInformationRequestCommand
+import baniakjr.lwp.model.command.PortOutputCommand
+import baniakjr.lwp.model.command.PortOutputFeedbackCommand
+import baniakjr.lwp.model.command.PortValueSingleCommand
+import baniakjr.lwp.model.command.UnknownCommand
+import baniakjr.lwp.model.command.VirtualPortSetupCommand
 
 /**
  * Main interface of Object oriented implementation of LWP
@@ -48,7 +67,8 @@ interface LWPCommand {
                 Command.VIRTUAL_PORT_SETUP -> VirtualPortSetupCommand.fromByteArray(byteArray)
                 Command.PORT_OUTPUT -> PortOutputCommand.fromByteArray(byteArray)
                 Command.PORT_OUTPUT_COMMAND_FEEDBACK -> PortOutputFeedbackCommand.fromByteArray(byteArray)
-                else -> UnknownCommand(byteArray)
+                null -> UnknownCommand(byteArray)
+                else -> GenericCommand(command.wrap(), byteArray)
             }
             return lwpCommand
         }
@@ -59,6 +79,22 @@ interface LWPCommand {
         @JvmStatic
         fun ByteArray.isSpecificCommand(command: Command): Boolean {
             return this.size >= LWP.MINIMAL_MSG_LENGTH && this[Command.IN_MESSAGE_INDEX] == command.value
+        }
+
+        /**
+         * Returns command byte value build with proper header
+         * @return ByteArray - Full Command byte value
+         */
+        @JvmStatic
+        fun ByteArray.createCommand(): ByteArray {
+            val size = (this.size + 2.toByte()).toByte()
+            val command = ByteArray(size.toInt())
+            command[0] = size
+            command[1] = MESSAGE_HEADER
+            for (i in this.indices) {
+                command[i + 2] = this[i]
+            }
+            return command
         }
 
     }

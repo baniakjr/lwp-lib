@@ -1,25 +1,27 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
 import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.Port
+import baniakjr.lwp.PortOutputSubCommand
+import baniakjr.lwp.StartupCompletion
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.Wrapper
 import baniakjr.lwp.model.command.output.GenericPortOutputCommand
-import baniakjr.lwp.model.command.output.WriteDirectModeCommand
-import baniakjr.lwp.model.command.output.StartPowerSingleCommand
-import baniakjr.lwp.model.command.output.StartPowerDualCommand
-import baniakjr.lwp.model.command.output.SetAccTimeCommand
-import baniakjr.lwp.model.command.output.SetDecTimeCommand
-import baniakjr.lwp.model.command.output.StartSpeedSingleCommand
-import baniakjr.lwp.model.command.output.StartSpeedDualCommand
-import baniakjr.lwp.model.command.output.StartSpeedForTimeSingleCommand
-import baniakjr.lwp.model.command.output.StartSpeedForTimeDualCommand
-import baniakjr.lwp.model.command.output.StartSpeedForDegSingleCommand
-import baniakjr.lwp.model.command.output.StartSpeedForDegDualCommand
-import baniakjr.lwp.model.command.output.GotoAbsPosSingleCommand
 import baniakjr.lwp.model.command.output.GotoAbsPosDualCommand
+import baniakjr.lwp.model.command.output.GotoAbsPosSingleCommand
 import baniakjr.lwp.model.command.output.SetTimeCommandBase
+import baniakjr.lwp.model.command.output.StartPowerDualCommand
+import baniakjr.lwp.model.command.output.StartPowerSingleCommand
+import baniakjr.lwp.model.command.output.StartSpeedDualCommand
+import baniakjr.lwp.model.command.output.StartSpeedForDegDualCommand
+import baniakjr.lwp.model.command.output.StartSpeedForDegSingleCommand
+import baniakjr.lwp.model.command.output.StartSpeedForTimeDualCommand
+import baniakjr.lwp.model.command.output.StartSpeedForTimeSingleCommand
+import baniakjr.lwp.model.command.output.StartSpeedSingleCommand
 import baniakjr.lwp.model.command.output.WriteDirectCommand
+import baniakjr.lwp.model.command.output.WriteDirectModeCommand
 
 abstract class PortOutputCommand internal constructor(
     val port: Wrapper<Port>,
@@ -32,7 +34,7 @@ abstract class PortOutputCommand internal constructor(
     abstract val payload: ByteArray
 
     override val byteValue: ByteArray
-        get() = LWP.createCommand(byteArrayOf(command.value, port.value, action.value, subCommand.value) + payload)
+        get() = (byteArrayOf(command.value, port.value, action.value, subCommand.value) + payload).createCommand()
 
     companion object {
         internal fun fromByteArray(byteArray: ByteArray): LWPCommand {

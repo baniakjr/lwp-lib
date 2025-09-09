@@ -1,8 +1,11 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
 import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.Port
+import baniakjr.lwp.VirtualPortSetupMode
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
@@ -17,9 +20,9 @@ class VirtualPortSetupCommand internal constructor(
     override val byteValue: ByteArray
         get() {
             return when(mode.enum) {
-                VirtualPortSetupMode.CONNECT -> LWP.createCommand(byteArrayOf(command.value, mode.value, portA.value, portB.value))
-                VirtualPortSetupMode.DISCONNECT -> LWP.createCommand(byteArrayOf(command.value, mode.value, portA.value))
-                else -> LWP.createCommand(byteArrayOf(command.value, mode.value, portA.value))
+                VirtualPortSetupMode.CONNECT -> byteArrayOf(command.value, mode.value, portA.value, portB.value).createCommand()
+                VirtualPortSetupMode.DISCONNECT -> byteArrayOf(command.value, mode.value, portA.value).createCommand()
+                else -> byteArrayOf(command.value, mode.value, portA.value).createCommand()
             }
         }
 
@@ -41,12 +44,12 @@ class VirtualPortSetupCommand internal constructor(
         }
 
         @JvmStatic
-        fun buildConnect(portA: Port, portB: Port): VirtualPortSetupCommand {
+        fun connect(portA: Port, portB: Port): VirtualPortSetupCommand {
             return VirtualPortSetupCommand(VirtualPortSetupMode.CONNECT.wrap(), portA.wrap(), portB.wrap())
         }
 
         @JvmStatic
-        fun buildDisconnect(port: Port): VirtualPortSetupCommand {
+        fun disconnect(port: Port): VirtualPortSetupCommand {
             return VirtualPortSetupCommand(VirtualPortSetupMode.DISCONNECT.wrap(), port.wrap())
         }
     }

@@ -1,8 +1,11 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
+import baniakjr.lwp.LWP
 import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.Port
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
@@ -17,7 +20,7 @@ class PortValueSingleCommand internal constructor(
     override val command: Wrapper<Command> = Command.PORT_VALUE_SINGLE.wrap()
 
     override val byteValue: ByteArray
-        get() = LWP.createCommand(byteArrayOf(command.value, port.value) + payload)
+        get() = (byteArrayOf(command.value, port.value) + payload).createCommand()
 
     companion object {
         internal fun fromByteArray(byteArray: ByteArray): LWPCommand {

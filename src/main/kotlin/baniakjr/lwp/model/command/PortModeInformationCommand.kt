@@ -1,10 +1,19 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
 import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.ModeInformationType
+import baniakjr.lwp.Port
+import baniakjr.lwp.PortMode
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.Wrapper
-import baniakjr.lwp.model.command.mode.*
+import baniakjr.lwp.model.command.mode.BiasPortModeInformationCommand
+import baniakjr.lwp.model.command.mode.FloatRangePortModeInformationCommand
+import baniakjr.lwp.model.command.mode.GenericPortModeInformationCommand
+import baniakjr.lwp.model.command.mode.NamePortModeInformationCommand
+import baniakjr.lwp.model.command.mode.SymbolPortModeInformationCommand
+import baniakjr.lwp.model.command.mode.ValueFormatPortModeInformationCommand
 
 abstract class PortModeInformationCommand internal constructor(
     val port: Wrapper<Port>,
@@ -18,7 +27,7 @@ abstract class PortModeInformationCommand internal constructor(
 
     override val byteValue: ByteArray
         get() {
-            return LWP.createCommand(byteArrayOf(command.value, port.value, mode.value, informationType.value) + payload)
+            return (byteArrayOf(command.value, port.value, mode.value, informationType.value) + payload).createCommand()
         }
 
     companion object {

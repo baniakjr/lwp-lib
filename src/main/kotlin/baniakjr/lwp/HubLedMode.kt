@@ -10,4 +10,11 @@ enum class HubLedMode(override val value: Byte) : Mode {
     COLOR(0x00),
     /** RGB color. Color set as 3 byte value. Value: 0x01 */
     RGB(0x01);
+
+    fun toPortMode(): PortMode {
+        return when (this) {
+            COLOR -> PortMode.MODE_0
+            RGB -> PortMode.MODE_1
+        }
+    }
 }

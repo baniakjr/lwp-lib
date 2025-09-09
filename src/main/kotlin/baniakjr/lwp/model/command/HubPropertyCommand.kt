@@ -1,8 +1,12 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.*
+import baniakjr.lwp.Command
+import baniakjr.lwp.HubProperty
+import baniakjr.lwp.HubPropertyOperation
+import baniakjr.lwp.LWP
 import baniakjr.lwp.LWPByteValue.Companion.wrap
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
@@ -18,7 +22,7 @@ class HubPropertyCommand internal constructor(
     override val command: Wrapper<Command> = Command.HUB_PROPERTY.wrap()
 
     override val byteValue: ByteArray
-        get() = LWP.createCommand(byteArrayOf(command.value, hubProperty.value, operation.value) + payload)
+        get() = (byteArrayOf(command.value, hubProperty.value, operation.value) + payload).createCommand()
 
     override fun toString(): String {
         return if (payload.isEmpty())
@@ -56,12 +60,18 @@ class HubPropertyCommand internal constructor(
         }
 
         @JvmStatic
+        @JvmOverloads
         fun build(
             hubProperty: HubProperty,
             operation: HubPropertyOperation,
             payload: ByteArray = byteArrayOf()
         ): HubPropertyCommand {
             return HubPropertyCommand(hubProperty.wrap(), operation.wrap(), payload)
+        }
+
+        @JvmStatic
+        fun getValue(hubProperty: HubProperty): HubPropertyCommand {
+            return build(hubProperty, HubPropertyOperation.REQUEST_UPDATE)
         }
     }
 }
