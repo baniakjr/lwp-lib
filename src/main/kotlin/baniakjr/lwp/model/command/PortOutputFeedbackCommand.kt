@@ -1,8 +1,12 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.*
-import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.LWPMask
+import baniakjr.lwp.definition.mask.PortFeedback
+import baniakjr.lwp.definition.value.Command
+import baniakjr.lwp.definition.value.Port
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
@@ -15,7 +19,7 @@ class PortOutputFeedbackCommand internal constructor(
     override val byteValue: ByteArray
         get() {
             val fbArray = feedback.map { it.asArray() }.fold(byteArrayOf()){ acc, next -> acc + next }
-            return LWP.createCommand(byteArrayOf(command.value) + fbArray)
+            return (byteArrayOf(command.value) + fbArray).createCommand()
         }
 
     companion object {

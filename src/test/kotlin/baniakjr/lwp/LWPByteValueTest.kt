@@ -1,5 +1,7 @@
 package baniakjr.lwp
 
+import baniakjr.lwp.definition.LWPByteValue
+import baniakjr.lwp.definition.value.Port
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

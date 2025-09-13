@@ -1,8 +1,10 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition.mask
+
+import baniakjr.lwp.definition.LWPMaskValue
 
 /**
- * Enum class representing the possible port mode capabilities. [PortInformationCommand][Command.PORT_INFORMATION].
- * Implements [LWPMaskValue]. These are bit mask values used with [LWPMask].
+ * Enum class representing the possible port mode capabilities. [PortInformationCommand][baniakjr.lwp.definition.value.Command.PORT_INFORMATION].
+ * Implements [LWPMaskValue]. These are bit mask values used with [baniakjr.lwp.definition.LWPMask].
  */
 enum class Capabilities(override val value: Byte) : LWPMaskValue {
 

@@ -1,14 +1,14 @@
 package baniakjr.lwp.model.command.output
 
-import baniakjr.lwp.Command
-import baniakjr.lwp.Port
-import baniakjr.lwp.StartupCompletion
-import baniakjr.lwp.model.command.PortOutputCommand
-import baniakjr.lwp.PortOutputSubCommand
+import baniakjr.lwp.definition.value.Command
+import baniakjr.lwp.definition.value.Port
+import baniakjr.lwp.definition.value.PortOutputSubCommand
+import baniakjr.lwp.definition.value.StartupCompletion
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 import baniakjr.lwp.model.command.MalformedCommand
+import baniakjr.lwp.model.command.PortOutputCommand
 
 /**
  * Abstract base class for commands that set acceleration or deceleration time.

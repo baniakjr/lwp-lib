@@ -1,8 +1,12 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.*
-import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.LWP
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.value.AlertOperation
+import baniakjr.lwp.definition.value.AlertType
+import baniakjr.lwp.definition.value.Command
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
@@ -17,9 +21,9 @@ class AlertCommand internal constructor(
     override val byteValue: ByteArray
         get() {
             return if(payload == null) {
-                LWP.createCommand(byteArrayOf(command.value, alertType.value, alertOperation.value))
+                byteArrayOf(command.value, alertType.value, alertOperation.value).createCommand()
             } else {
-                LWP.createCommand(byteArrayOf(command.value, alertType.value, alertOperation.value, payload))
+                byteArrayOf(command.value, alertType.value, alertOperation.value, payload).createCommand()
             }
         }
 
@@ -41,6 +45,21 @@ class AlertCommand internal constructor(
         @JvmStatic
         fun build(alertType: AlertType, alertOperation: AlertOperation): AlertCommand {
             return AlertCommand(alertType.wrap(), alertOperation.wrap())
+        }
+
+        @JvmStatic
+        fun enableUpdate(alertType: AlertType): AlertCommand {
+            return build(alertType, AlertOperation.ENABLE_UPDATES)
+        }
+
+        @JvmStatic
+        fun disableUpdate(alertType: AlertType): AlertCommand {
+            return build(alertType, AlertOperation.DISABLE_UPDATES)
+        }
+
+        @JvmStatic
+        fun request(alertType: AlertType): AlertCommand {
+            return build(alertType, AlertOperation.REQUEST_UPDATE)
         }
     }
 

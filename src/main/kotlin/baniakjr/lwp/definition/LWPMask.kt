@@ -1,4 +1,4 @@
-package baniakjr.lwp
+package baniakjr.lwp.definition
 
 import java.util.stream.Collectors
 

@@ -1,7 +1,7 @@
 package baniakjr.lwp.model
 
 import baniakjr.lwp.LWP
-import baniakjr.lwp.LWPByteValue
+import baniakjr.lwp.definition.LWPByteValue
 
 /**
  * Wrapper for any [LWPByteValue enum][LWPByteValue] that can hold unknown byte value (not yet implemented in this library)

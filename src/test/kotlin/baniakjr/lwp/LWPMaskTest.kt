@@ -1,5 +1,7 @@
 package baniakjr.lwp
 
+import baniakjr.lwp.definition.LWPMask
+import baniakjr.lwp.definition.mask.PlayVmOperation
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

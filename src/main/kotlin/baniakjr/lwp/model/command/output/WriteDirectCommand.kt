@@ -1,7 +1,11 @@
 package baniakjr.lwp.model.command.output
 
-import baniakjr.lwp.*
-import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.LWP
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.value.Command
+import baniakjr.lwp.definition.value.Port
+import baniakjr.lwp.definition.value.PortOutputSubCommand
+import baniakjr.lwp.definition.value.StartupCompletion
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
@@ -18,7 +22,8 @@ class WriteDirectCommand internal constructor(
 
     companion object {
         internal fun fromByteArray(byteArray: ByteArray): LWPCommand {
-            if (!byteArray.isSpecificCommand(Command.PORT_OUTPUT) || !byteArray.isSpecificSubCommand(PortOutputSubCommand.WRITE_DIRECT)) {
+            if (!byteArray.isSpecificCommand(Command.PORT_OUTPUT) ||
+                !byteArray.isSpecificSubCommand(PortOutputSubCommand.WRITE_DIRECT)) {
                 return MalformedCommand(byteArray)
             }
             val port = Wrapper.wrap(Port::class.java, byteArray[Port.IN_INFORMATION_MESSAGE_INDEX])

@@ -1,7 +1,11 @@
 package baniakjr.lwp.model.command.mode
 
-import baniakjr.lwp.*
-import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.mode.PortMode
+import baniakjr.lwp.definition.value.Command
+import baniakjr.lwp.definition.value.ModeInformationType
+import baniakjr.lwp.definition.value.Port
+import baniakjr.lwp.definition.value.ValueFormat
 import baniakjr.lwp.model.LWPCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
@@ -24,7 +28,9 @@ class ValueFormatPortModeInformationCommand internal constructor(
 
     companion object {
         internal fun fromByteArray(byteArray: ByteArray): LWPCommand {
-            if(!byteArray.isSpecificCommand(Command.PORT_MODE_INFORMATION) || byteArray.size != ModeInformationType.LENGTH_WO_DATA + 4 || !byteArray.isSpecificModeInformationType(ModeInformationType.FORMAT) ) {
+            if(!byteArray.isSpecificCommand(Command.PORT_MODE_INFORMATION) ||
+                byteArray.size != ModeInformationType.LENGTH_WO_DATA + 4 ||
+                !byteArray.isSpecificModeInformationType(ModeInformationType.FORMAT) ) {
                 return MalformedCommand(byteArray)
             }
             val port = Wrapper.wrap(Port::class.java, byteArray[Port.IN_INFORMATION_MESSAGE_INDEX])

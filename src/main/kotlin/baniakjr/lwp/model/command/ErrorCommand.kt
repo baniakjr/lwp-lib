@@ -1,10 +1,10 @@
 package baniakjr.lwp.model.command
 
-import baniakjr.lwp.Command
-import baniakjr.lwp.ErrorCode
-import baniakjr.lwp.LWP
-import baniakjr.lwp.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.LWPByteValue.Companion.wrap
+import baniakjr.lwp.definition.value.Command
+import baniakjr.lwp.definition.value.ErrorCode
 import baniakjr.lwp.model.LWPCommand
+import baniakjr.lwp.model.LWPCommand.Companion.createCommand
 import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
@@ -17,7 +17,7 @@ class ErrorCommand internal constructor(
 
     override val byteValue: ByteArray
         get() {
-            return LWP.createCommand(byteArrayOf(command.value, commandType.value, errorCode.value))
+            return byteArrayOf(command.value, commandType.value, errorCode.value).createCommand()
         }
 
     companion object {
