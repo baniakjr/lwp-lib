@@ -32,6 +32,14 @@ class Wrapper<T> internal constructor(val enum: T? = null, private val byte: Byt
         return enum == null && byte == null
     }
 
+    fun isEqual(enumToCompare: T?): Boolean {
+        return enum == enumToCompare
+    }
+
+    fun isEqual(byteToCompare: Byte): Boolean {
+        return value == byteToCompare
+    }
+
     override val value: Byte
         get() = enum?.value?: byte?: 0x00
 
