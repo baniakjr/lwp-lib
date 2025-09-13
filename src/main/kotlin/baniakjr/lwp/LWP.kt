@@ -183,19 +183,7 @@ object LWP {
         if (message.size < HubProperty.MSG_WO_DATA_LENGTH + 4) {
             return ""
         }
-
-        val versionByte0 = message[HubProperty.DATA_START_INDEX]
-        val versionByte1 = message[HubProperty.DATA_START_INDEX + 1]
-        val versionByte2 = message[HubProperty.DATA_START_INDEX + 2]
-        val versionByte3 = message[HubProperty.DATA_START_INDEX + 3]
-
-        val major = versionByte3.toInt() shr 4
-        val minor = versionByte3.toInt() and 0xf
-        val bugfix = ((versionByte2.toInt() shr 4) * 10) + (versionByte2.toInt() and 0xf)
-        val build =
-            ((versionByte1.toInt() shr 4) * 1000) + ((versionByte1.toInt() and 0xf) * 100) + ((versionByte0.toInt() shr 4) * 10) + (versionByte0.toInt() and 0xf)
-
-        return "$major.$minor.$bugfix.$build"
+        return convertToVersionNumber(message.copyOfRange(HubProperty.DATA_START_INDEX, HubProperty.DATA_START_INDEX + 4))
     }
 
     /**
@@ -291,20 +279,20 @@ object LWP {
         if (message.size < HubProperty.MSG_WO_DATA_LENGTH + 2) {
             return ""
         }
-        return String.format(Locale.getDefault(), "%d.%d", message[HubProperty.DATA_START_INDEX + 1], message[HubProperty.DATA_START_INDEX])
+        return convertToLWPVersion(message.copyOfRange(HubProperty.DATA_START_INDEX, HubProperty.DATA_START_INDEX + 2))
     }
 
     /**
      * Returns LWP version decoded from byteArray
-     * @param message ByteArray - Bytes to convert, should be at least 2 bytes
+     * @param payload ByteArray - Bytes to convert, should be at least 2 bytes
      * @return String - LWP Version
      */
     @JvmStatic
-    fun convertToLWPVersion(message: ByteArray): String {
-        if (message.size < 2) {
+    fun convertToLWPVersion(payload: ByteArray): String {
+        if (payload.size < 2) {
             return ""
         }
-        return String.format(Locale.getDefault(), "%d.%d", message[1], message[0])
+        return String.format(Locale.getDefault(), "%d.%d", payload[1], payload[0])
     }
 
     /**
@@ -318,7 +306,20 @@ object LWP {
             return null
         }
         val versionBytes = Arrays.copyOfRange(message, 4, 6)
-        return convertToInt16(versionBytes) / 1000f
+        return convertBatteryVoltage(versionBytes)
+    }
+
+    /**
+     * Returns battery voltage decoded from byteArray
+     * @param payload ByteArray - Bytes to convert, should be at least 2 bytes
+     * @return Float - Battery voltage in Volts
+     */
+    @JvmStatic
+    fun convertBatteryVoltage(payload: ByteArray): Float? {
+        if (payload.size < 2) {
+            return null
+        }
+        return convertToInt16(payload) / 1000f
     }
 
     /**
@@ -332,7 +333,20 @@ object LWP {
             return null
         }
         val versionBytes = Arrays.copyOfRange(message, 4, 6)
-        return convertToInt16(versionBytes) / 10f
+        return convertTemperature(versionBytes)
+    }
+
+    /**
+     * Returns temperature decoded from byteArray
+     * @param payload ByteArray - Bytes to convert, should be at least 2 bytes
+     * @return Float - Temperature in Celsius
+     */
+    @JvmStatic
+    fun convertTemperature(payload: ByteArray): Float? {
+        if (payload.size < 2) {
+            return null
+        }
+        return convertToInt16(payload) / 10f
     }
 
     /**
@@ -345,7 +359,20 @@ object LWP {
         if (message.size < HubProperty.MSG_WO_DATA_LENGTH + 1) {
             return null
         }
-        return message[HubProperty.DATA_START_INDEX].toInt()
+        return convertBatteryPercentage(byteArrayOf(message[HubProperty.DATA_START_INDEX]))
+    }
+
+    /**
+     * Returns battery percentage decoded from byteArray
+     * @param payload ByteArray - Bytes to convert, should be at least 1 byte
+     * @return Int - Battery percentage
+     */
+    @JvmStatic
+    fun convertBatteryPercentage(payload: ByteArray): Int? {
+        if (payload.size < 1) {
+            return null
+        }
+        return payload[0].toInt()
     }
 
     /**
@@ -359,7 +386,17 @@ object LWP {
             return ""
         }
         val nameBytes = Arrays.copyOfRange(message, HubProperty.DATA_START_INDEX, message.size)
-        return convertToString(nameBytes)
+        return convertHubName(nameBytes)
+    }
+
+    /**
+     * Returns name of the hub decoded from byteArray
+     * @param payload ByteArray - Bytes to convert
+     * @return String - Hub name
+     */
+    @JvmStatic
+    fun convertHubName(payload: ByteArray): String {
+        return convertToString(payload)
     }
 
     /**
