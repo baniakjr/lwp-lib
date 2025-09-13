@@ -11,9 +11,9 @@ import baniakjr.lwp.model.LWPCommand.Companion.isSpecificCommand
 import baniakjr.lwp.model.Wrapper
 
 class AlertCommand internal constructor(
-    private val alertType: Wrapper<AlertType>,
-    private val alertOperation: Wrapper<AlertOperation>,
-    private val payload: Byte? = null
+    val alertType: Wrapper<AlertType>,
+    val alertOperation: Wrapper<AlertOperation>,
+    val payload: Byte? = null
 ) : LWPCommand {
 
     override val command: Wrapper<Command> = Command.ALERT.wrap()
